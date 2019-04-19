@@ -1,0 +1,36 @@
+ @model One
+ <h1>Dojo Activity Center <a href="/home">Home</a> |<a href="/logout">Log Out</a></h1>
+ <hr>
+    <h1>@Model.Activity.Title  
+    @if(@Model.Activity.User.UserId == @Model.User.UserId)
+    {
+        <td><a href="/deleteactivity/@Model.Activity.ActivityId"><input type="button" value="Delete"></a></td>
+    }
+    else
+    {
+        @if(@Model.Activity.Guest.Any(u => u.UserId == @Model.User.UserId))
+        {
+            <a href="/oneleft/@Model.Activity.ActivityId/@Model.User.UserId"><input type="button" value="Left"></a>
+        }
+        else
+        {
+            <a href="/onejoin/@Model.Activity.ActivityId/@Model.User.UserId"><input type="button" value="Join"></a> 
+        }     
+    }
+    </h1>
+    <h3>Event Coordinator : @Model.Activity.User.FirstName</h3>
+    <h3>Description</h3>
+        <textarea cols="90" rows="3" class="text">@Model.Activity.Description</textarea>
+    @if(Model.Activity.Guest.Count == 0)
+    {
+        <h3>Participants: 0</h3>
+    }
+    else
+    {
+       <h3>Participants :</h3>
+       @foreach(var x in Model.Activity.Guest)
+       {
+           <li>@x.User.FirstName @x.User.LastName</li>
+       }
+    }
+    <td></td>

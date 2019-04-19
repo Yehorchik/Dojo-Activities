@@ -1,0 +1,42 @@
+ @model Dashboard
+ <h1>Dojo Activity Center | Welcome @Model.User.FirstName <a href="/logout">Log Out</a></h1>
+    <table class="table table-dark">
+        <thead>
+            <tr>
+            <th scope="col">Activity</th>
+            <th scope="col">Date and Time</th>
+            <th scope="col">Duration</th>
+            <th scope="col">Event Coordinator</th>
+            <th scope="col">Number of Participants</th>
+            <th scope="col">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach(var x in @Model.Activities)
+            {
+                <tr>
+                    <th scope="row"><a href="/info/@x.ActivityId">@x.Title</a></th>
+                    <td>@x.Date</td>
+                    <td>@x.DurationFirst @x.DurationSecond</td>                                                          
+                    <td>@x.User.FirstName @x.User.LastName</td>                                                                                                                                                        
+                    <td>@x.Guest.Count</td>    
+                    @if(x.User.UserId == @Model.User.UserId)
+                    {
+                        <td><a href="/deleteactivity/@x.ActivityId"><input type="button" value="Delete"></a></td>
+                    }
+                    else
+                    {
+                       @if(@x.Guest.Any(u => u.UserId == @Model.User.UserId))
+                        {
+                            <td><a href="/removeguest/@Model.User.UserId/@x.ActivityId"><input type="button" value="Left"></a></td>
+                        }
+                        else
+                        {
+                            <td><a href="/addguest/@Model.User.UserId/@x.ActivityId"><input type="button" value="Join"></a></td> 
+                        }     
+                    } 
+                </tr>     
+            }  
+        </tbody>
+    </table>
+    <a href="/new"><input type="button" value="Add New Activity"></a>
